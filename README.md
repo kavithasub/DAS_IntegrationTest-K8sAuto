@@ -1,7 +1,7 @@
 # DAS_IntegrationTest-K8sAuto
-This is to corp DAS Integration framework source and K8s Infrastructure framework source
+This repository contains DAS Integration framework source and K8s Infrastructure framework source
 ### DAS integration test framework ###
-
+This is to execute test suites with using DAS cluster deployment for product-DAS
 
 ### infrastructure framework  automation ###
 This repository contains infrastructure creation automation resources for a K8S cluster as below
