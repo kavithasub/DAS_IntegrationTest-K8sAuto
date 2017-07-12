@@ -63,7 +63,7 @@ unzip -q product-4.0.0-SNAPSHOT.zip -d tmp/
 #------- to copy downloaded distribution to DAS image
 echo "Copying files from the temp directory to distribution directory"
 #cp -r tmp/*/* ${das_home}/distribution/
-sudo docker cp tmp/*/* |- $containerid:/home/
+sudo docker cp $script_path/tmp/* $containerid:/home/
 sleep 120
 
 echo "Deleting the temp directory!!"
