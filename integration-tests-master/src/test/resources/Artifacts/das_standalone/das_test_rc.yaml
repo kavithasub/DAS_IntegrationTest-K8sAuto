@@ -37,7 +37,7 @@ spec:
           value : "das_standalone"
         -
           name : das_home
-          value : "/opt/das"
+          value : "home"
         -
           name : das_test_repo_name
           value : "integration-tests"
