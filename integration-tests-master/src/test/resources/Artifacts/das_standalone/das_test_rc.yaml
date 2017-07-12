@@ -1,0 +1,54 @@
+#Copyright (c) 2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: das-test-version-1
+  labels:
+    name: das-test-version-1
+spec:
+  replicas: 1
+  selector:
+    name: das-test-version-1
+  template:
+    metadata:
+      labels:
+        name: das-test-version-1
+    spec:
+      containers:
+      -
+        name: das-service
+          image: dockerhub.private.wso2.com/kavitha-dasc5-integration:4.0.0
+        env:
+        -
+          name : pattern
+          value : "das_standalone"
+        -
+          name : das_home
+          value : "/opt/das"
+        -
+          name : das_test_repo_name
+          value : "integration-tests"
+        -
+          name : JAVA_HOME
+          value : "/usr/lib/jvm/java-8-oracle"
+
+        ports:
+        -
+          containerPort: 9090
+          protocol: "TCP"
+
+      imagePullSecrets:
+       - name: registrykey

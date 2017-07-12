@@ -1,0 +1,29 @@
+destroying the Kubenetes cluster and associated instances
+[0m[1mopenstack_compute_instance_v2.k8s-master: Refreshing state... (ID: 46b24994-2b19-4b28-9bf3-bbe66036198d)[0m
+[0m[1mopenstack_compute_instance_v2.k8s-node.0: Refreshing state... (ID: ccee2ca1-bcda-4c7d-888b-6fb9723413ce)[0m
+[0m[1mopenstack_compute_instance_v2.k8s-node.1: Refreshing state... (ID: 4558cfa5-2b93-4917-927c-2dc9dbf19c06)[0m
+[0m[1mnull_resource.ansible-provision: Refreshing state... (ID: 7130553351190807564)[0m
+[0m[1mnull_resource.ansible-provision: Destroying... (ID: 7130553351190807564)[0m[0m
+[0m[1mnull_resource.ansible-provision: Destruction complete[0m[0m
+[0m[1mopenstack_compute_instance_v2.k8s-master: Destroying... (ID: 46b24994-2b19-4b28-9bf3-bbe66036198d)[0m[0m
+[0m[1mopenstack_compute_instance_v2.k8s-node.0: Destroying... (ID: ccee2ca1-bcda-4c7d-888b-6fb9723413ce)[0m[0m
+[0m[1mopenstack_compute_instance_v2.k8s-node.1: Destroying... (ID: 4558cfa5-2b93-4917-927c-2dc9dbf19c06)[0m[0m
+[0m[1mopenstack_compute_instance_v2.k8s-node.0: Still destroying... (ID: ccee2ca1-bcda-4c7d-888b-6fb9723413ce, 10s elapsed)[0m[0m
+[0m[1mopenstack_compute_instance_v2.k8s-master: Still destroying... (ID: 46b24994-2b19-4b28-9bf3-bbe66036198d, 10s elapsed)[0m[0m
+[0m[1mopenstack_compute_instance_v2.k8s-node.1: Still destroying... (ID: 4558cfa5-2b93-4917-927c-2dc9dbf19c06, 10s elapsed)[0m[0m
+[0m[1mopenstack_compute_instance_v2.k8s-node.0: Still destroying... (ID: ccee2ca1-bcda-4c7d-888b-6fb9723413ce, 20s elapsed)[0m[0m
+[0m[1mopenstack_compute_instance_v2.k8s-master: Still destroying... (ID: 46b24994-2b19-4b28-9bf3-bbe66036198d, 20s elapsed)[0m[0m
+[0m[1mopenstack_compute_instance_v2.k8s-node.1: Still destroying... (ID: 4558cfa5-2b93-4917-927c-2dc9dbf19c06, 20s elapsed)[0m[0m
+[0m[1mopenstack_compute_instance_v2.k8s-master: Destruction complete[0m[0m
+[0m[1mopenstack_compute_instance_v2.k8s-node.1: Destruction complete[0m[0m
+[0m[1mopenstack_compute_instance_v2.k8s-node.0: Destruction complete[0m[0m
+[0m[1m[32m
+Destroy complete! Resources: 4 destroyed.[0m
+destroying the Kubenetes cluster and associated instances
+[0m[1mprovider.openstack.auth_url[0m
+  The Identity authentication URL.
+
+  [1mEnter a value:[0m [0m
+Interrupt received.
+Please wait for Terraform to exit or data loss may occur.
+Gracefully shutting down...

@@ -1,0 +1,13 @@
+deployments:
+  -
+    name: das_standalone
+    enable: true
+    deployscripts: deploy.sh
+    repository: N/A
+    suite: pattern1
+    undeployscripts: undeploy.sh
+    filePath: deployment.json
+    instancemap :
+    -
+      das : das-test-version-1
+
