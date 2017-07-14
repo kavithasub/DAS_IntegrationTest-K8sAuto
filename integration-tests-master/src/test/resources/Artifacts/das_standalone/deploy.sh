@@ -15,26 +15,26 @@
 # limitations under the License.
 
 das_port=32013
-server_response="Problem accessing: /. Reason: Not Found"
+server_response="Problem accessing: /worker. Reason: Not Found"
 
 prgdir=$(dirname "$0")
 script_path=$(cd "$prgdir"; cd ..; pwd)
 
 # ----  This is to initiate infrastucture deployment
 
-#source $script_path/invoke.sh
+#/bin.bash $script_path/infrastructure-automation/invoke.sh
 #sleep 10
 
 
-#------- invoke for docker image creation and DAS configuration
-/bin/bash $script_path/docker-files/docker1.sh
+#------- This is to invoke for docker image creation and DAS configuration
+#/bin/bash $script_path/docker-files/das-service/docker1.sh
 
 
 # ----- K8s master url needs to be export from /k8s.properties
 
-KUBERNETES_MASTER=$(cat $script_path/infrastructure-automation/k8s.properties)
-export $KUBERNETES_MASTER
-echo "Kubernetes Master URL is Set to : "$KUBERNETES_MASTER
+K8s_master=$(echo $(cat $script_path/infrastructure-automation/k8s.properties))
+export $K8s_master
+echo "Kubernetes Master URL is Set to : "$K8s_master
 echo "Current location : "$script_path
 
 echo "Creating the K8S Pods!!!!"
@@ -42,6 +42,8 @@ echo "Creating the K8S Pods!!!!"
 kubectl create -f $script_path/das_standalone/das_test_service.yaml
 kubectl create -f $script_path/das_standalone/das_test_rc.yaml
 
+sleep 10
+sudo docker build $script_path/docker-files/das-service
 sleep 10
 
 function getKubeNodeIP() {
@@ -55,21 +57,30 @@ function getKubeNodeIP() {
 }
 
 kube_nodes=($(kubectl get nodes | awk '{if (NR!=1) print $1}'))
-host=$(getKubeNodeIP "${kube_nodes[0]}")
+host=$(getKubeNodeIP "${kube_nodes[1]}")
 echo $host
 echo "Waiting DAS to launch on http://${host}:${das_port}"
 sleep 10
 
 # The loop is used as a global timer. Current loop timer is 3*100 Sec.
-#for number in {1..100}
-#do
-#echo $(date)" Waiting for server startup!"
-# if [ "$server_response" == "$(curl --silent --get --fail --connect-timeout 5 --max-time 10 http://${host}:${das_port})/editor" ]
-# then
-#  break
-# fi
-#sleep 3
-#done
+for number in {1..10}
+do
+echo $(date)" Waiting for server startup!"
+if [ "$server_response" == "$(curl --silent --get --connect-timeout 5 --max-time 10 http://${host}:${das_port})/worker" ]
+#if [$(ps -ef | grep -v grep | grep $service | wc -l) > 0  ]
+then
+  break
+fi
+sleep 3
+done
+
+trap : 0
+
+echo >&2 '
+************
+*** DONE ***
+************
+'
 
 echo 'Generating The deployment.json!'
 pods=$(kubectl get pods --output=jsonpath={.items..metadata.name})
