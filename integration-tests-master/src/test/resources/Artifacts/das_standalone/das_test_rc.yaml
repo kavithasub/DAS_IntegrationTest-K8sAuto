@@ -19,7 +19,7 @@ metadata:
   labels:
     name: das-test-version-1
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     name: das-test-version-1
   template:
@@ -30,21 +30,21 @@ spec:
       containers:
       -
         name: das-service
-        image: dockerhub.private.wso2.com/kavitha-dasc5-integration:4.0.0
+        image: dockerhub.private.wso2.com/kavitha-dasc5-inte-new:14.04
         env:
         -
           name : pattern
           value : "das_standalone"
         -
           name : das_home
-          value : "/home"
+          value : "/opt/distribution"
         -
           name : JAVA_HOME
-          value : "/usr/local/java/jdk1.8.0_51"
+          value : "/usr/lib/jvm/java-8-oracle"
 
         ports:
           - containerPort: 9090
             protocol: "TCP"
 
       imagePullSecrets:
-       - name: regsecret
+       - name: registrykey
