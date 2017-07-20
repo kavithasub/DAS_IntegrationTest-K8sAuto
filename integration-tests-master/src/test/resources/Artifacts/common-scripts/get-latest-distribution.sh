@@ -16,7 +16,7 @@
 # me ---------- this has changed according to DAS jenkins build
 # This is triggered from fetch-artifacts.sh  
 #jenkins_base_url="http://localhost:9090/job/helloworld"
-jenkins_base_url="https://wso2.org/jenkins/job/products/job/product-das"
+jenkins_base_url="https://wso2.org/jenkins/job/products/job/product-sp"
 
 #Get the Latest Successful Build URL from JENKINS
 latest_successfull_build=$(curl -s "$jenkins_base_url/api/xml?xpath=//lastSuccessfulBuild/url")
@@ -28,12 +28,14 @@ echo "Latest Successful Build : "$latest_successfull_build_url
 
 # Get the relativePath of the distribution pack
 #dirtribution_url=$(curl -s -G $latest_successfull_build_url"org.ballerinalang.tools\$ballerina-tools/api/xml" -d xpath=\(/mavenBuild//relativePath\)[2])
-disrtribution_url=$(curl -s -G $latest_successfull_build_url"org.wso2.das\$product/api/xml" -d xpath=\(/mavenBuild//relativePath\)[2])
-#echo $disrtribution_url
+disrtribution_url=$(curl -s -G $latest_successfull_build_url"org.wso2.sp\$product/api/xml" -d xpath=\(/mavenBuild//relativePath\)[2])
+echo $disrtribution_url
+
+# org.wso2.sp/product/4.0.0-SNAPSHOT/product-4.0.0-SNAPSHOT.zip
 
 # Extracting the relative path to the distribution pack
 downloadable_url=$(echo $disrtribution_url | sed -n 's:.*<relativePath>\(.*\)</relativePath>.*:\1:p')
-#echo $downloadable_url
+echo $downloadable_url
 
-echo "Downloadable URL : " $latest_successfull_build_url"org.wso2.das\$product/artifact/"$downloadable_url
+echo "Downloadable URL : " $latest_successfull_build_url"org.wso2.sp\$product/artifact/"$downloadable_url
 wget $latest_successfull_build_url"org.wso2.das\$product/artifact/"$downloadable_url
