@@ -9,13 +9,16 @@ log(){
  return
 }
 
-echo "Invoke for the init.sh is starting..."
-
 prgdir=$(dirname "$0")
 script_path=$(cd "$prgdir"; pwd)
 
-#source $script_path/dev-openrc-1.sh
-source $script_path/qa-openrc.sh
+echo "You are initiated the process now... .."
+echo "Your working directory is : "$script_path
+
+#----- ## To pass the openstack authentication
+
+#source $script_path/dev-openrc-2.sh
+source $script_path/qa-openrc-2.sh
 
 log "===The Jenkins Main Script Logs===="
 log "Checking the Environment variables;"
@@ -39,11 +42,13 @@ if [ -z $OS_PASSWORD ]; then
  exit 1;
 fi
 
-# Seems Jenkins is not picking the Path variables from the system, hence as a workaroubd setting the path
+# If Jenkins is not picking the Path variables from the system, the workaround is to setting the path
 #TERRA_HOME=/etc/terraform
 #export PATH=$TERRA_HOME:$PATH
 
-# Trigering the Ansible Scripts to do the kubernetes cluster
+
+#----- ## To trigger the Ansible Scripts to do the kubernetes cluster
+
 source $script_path/cluster-create.sh
 
 # Check the cluster health
@@ -59,4 +64,4 @@ source $script_path/cluster-create.sh
 #  exit 1;
 #fi	
 
-log "Successfully Finished Execution..."
+log "This is awesome!! Infrastructure Execution is Success :) :)"
