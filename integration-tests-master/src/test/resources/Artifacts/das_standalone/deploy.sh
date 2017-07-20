@@ -15,19 +15,15 @@
 # limitations under the License.
 
 das_port=32013
-server_response="Problem accessing: /worker. Reason: Not Found"
-
 prgdir=$(dirname "$0")
 script_path=$(cd "$prgdir"; cd ..; pwd)
-
-# ----  This is to initiate infrastucture deployment
-
-#/bin.bash $script_path/infrastructure-automation/invoke.sh
-#sleep 10
+echo "Current location : "$script_path
 
 
-#------- This is to invoke for docker image creation and DAS configuration
-#/bin/bash $script_path/docker-files/das-service/docker1.sh
+# ----- ##  This is to initiate infrastucture deployment
+
+#/bin/bash $script_path/infrastructure-automation/init.sh
+#sleep 30
 
 
 # ----- K8s master url needs to be export from /k8s.properties
@@ -35,16 +31,25 @@ script_path=$(cd "$prgdir"; cd ..; pwd)
 K8s_master=$(echo $(cat $script_path/infrastructure-automation/k8s.properties))
 export $K8s_master
 echo "Kubernetes Master URL is Set to : "$K8s_master
-echo "Current location : "$script_path
+
+
+#------ ## This is to initiate for docker image creation and DAS configuration
+
+/bin/bash $script_path/docker-files/docker-create.sh
+sleep 2
+
 
 echo "Creating the K8S Pods!!!!"
 
+
+#----- ## This is to create K8s svc, rc, pods and containers
+
 kubectl create -f $script_path/das_standalone/das_test_service.yaml
 kubectl create -f $script_path/das_standalone/das_test_rc.yaml
+sleep 10
 
-sleep 10
-sudo docker build $script_path/docker-files/das-service
-sleep 10
+
+#----- ## To retrieve IP addresses of relevant nodes
 
 function getKubeNodeIP() {
     IFS=$','
@@ -57,22 +62,28 @@ function getKubeNodeIP() {
 }
 
 kube_nodes=($(kubectl get nodes | awk '{if (NR!=1) print $1}'))
-host=$(getKubeNodeIP "${kube_nodes[1]}")
+host=$(getKubeNodeIP "${kube_nodes[0]}")
 echo $host
 echo "Waiting DAS to launch on http://${host}:${das_port}"
 sleep 10
 
-# The loop is used as a global timer. Current loop timer is 3*100 Sec.
-for number in {1..10}
+#----- ## To check the server start success
+
+# ----- the loop is used as a global timer. Current loop timer is 3*100 Sec.
+while true
 do
 echo $(date)" Waiting for server startup!"
-if [ "$server_response" == "$(curl --silent --get --connect-timeout 5 --max-time 10 http://${host}:${das_port})/worker" ]
-#if [$(ps -ef | grep -v grep | grep $service | wc -l) > 0  ]
-then
-  break
-fi
-sleep 3
+  STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://${host}:${das_port}/siddhi-apps)
+  #curl --silent --get --fail --connect-timeout 5 --max-time 10 http://192.168.58.21:32013/siddhi-apps  ## to get response body
+  if [ $STATUS -eq 200 ]; then
+    echo "Awesome! You can access DAS server now!"
+    break
+  else
+    echo "Got $STATUS :( Not done yet..."
+  fi
+  sleep 10
 done
+
 
 trap : 0
 
@@ -117,6 +128,6 @@ json+="]"
 
 echo $json;
 
-cat > deployment.json << EOF1
+cat > das_standalone/deployment.json << EOF1
 $json
 EOF1
